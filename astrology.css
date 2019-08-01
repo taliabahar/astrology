@@ -1,0 +1,106 @@
+body{
+  margin: 0;
+  background-color: rgb( 202, 186, 253);
+  display: grid;
+  grid-template-columns: : 1fr 1fr 1fr;
+  /* grid-template-rows: 1fr 1fr 1fr 1fr 1fr; */
+  grid-template-rows: 25% 25% 25% 25%;
+ /* 4 rows 3 columns */
+  height: 100vh;
+}
+
+img{
+  width: 60px;
+  height: 60px;
+}
+
+h1{
+  text-align: center;
+  color: white;
+  font-family: 'Rozha One', serif;
+  text-shadow: #FFDD20 0px 0px 2px;
+  grid-row: 1;
+  grid-column: 1 / span 3;
+
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+h2{
+  font-family: 'Grenze', serif;
+  color: white;
+}
+
+#Aquarius{
+  grid-row: 2;
+  grid-column: 1;
+  text-align: center;
+}
+
+#Pisces{
+  grid-row: 2;
+  grid-column: 2;
+  text-align: center;
+}
+
+#Aries{
+  grid-row: 2;
+  grid-column: 3;
+  text-align: center;
+}
+
+#Taurus{
+  grid-row: 3;
+  grid-column: 1;
+  text-align: center;
+}
+
+#Gemini{
+  grid-row: 3;
+  grid-column: 2;
+  text-align: center;
+}
+
+#Cancer{
+  grid-row: 3;
+  grid-column: 3;
+  text-align: center;
+}
+
+#Leo{
+  grid-row: 4;
+  grid-column: 1;
+  text-align: center;
+}
+
+#Virgo{
+  grid-row: 4;
+  grid-column: 2;
+  text-align: center;
+}
+
+#Libra{
+  grid-row: 4;
+  grid-column: 3;
+  text-align: center;
+  color: white;
+}
+
+#Scorpio{
+  grid-row: 5;
+  grid-column: 1;
+  text-align: center;
+}
+
+#Saggitarius{
+  grid-row: 5;
+  grid-column: 2;
+  text-align: center;
+}
+
+#Capricorn{
+  grid-row: 5;
+  grid-column: 3;
+  text-align: center;
+}

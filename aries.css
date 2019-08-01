@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  background-color: rgb( 202, 186, 253);
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  font-family: 'Rozha One', serif;
+  text-shadow: #FFDD20 0px 0px 2px;
+}
