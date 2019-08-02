@@ -12,3 +12,9 @@ function unhover(element) {
   element.setAttribute('src', stringSign);
   element.previousElementSibling.style.textShadow = "none";
 }
+
+$(document).ready(function() {
+  $('img.thumbnail').click(function() {
+    window.location.href = this.alt + '.html';
+  });
+});
