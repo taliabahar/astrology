@@ -11,8 +11,6 @@ handlers:
   static_dir: /media/gold-png
 - url: /media/png
   static_dir: /media/png
-- url: /scripts
-  static_dir: scripts
 - url: /.*
   script: main.app
 - url: /favicon\.ico
