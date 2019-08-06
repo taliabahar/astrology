@@ -5,7 +5,6 @@
 //   title.style.fontSize = "50px";
 // });
 
-
 // document.addEventListener("click", secretMessage);
 //
 // function secretMessage(){
