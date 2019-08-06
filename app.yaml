@@ -9,12 +9,13 @@ handlers:
   static_dir: scripts
 - url: /media
   static_dir: media
+- url: /templates
+  static_dir: templates
 - url: /.*
   script: main.app
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
-
 
 libraries:
 - name: webapp2

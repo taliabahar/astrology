@@ -3,7 +3,6 @@ body{
   background-color: rgb( 202, 186, 253);
   display: grid;
   grid-template-columns: : 1fr 1fr 1fr;
-  /* grid-template-rows: 1fr 1fr 1fr 1fr 1fr; */
   grid-template-rows: 25% 25% 25% 25%;
  /* 4 rows 3 columns */
   height: 100vh;
@@ -103,4 +102,8 @@ h2{
   grid-row: 5;
   grid-column: 3;
   text-align: center;
+}
+
+#Libra, #Saggitarius, #Capricorn {
+  margin-bottom: 6%;
 }
