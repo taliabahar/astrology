@@ -16,6 +16,7 @@ jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
 #the handler section
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
@@ -123,7 +124,8 @@ class UpdateScoreHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', LoginHandler),
-    ('/profile', Profile),
+    ('/aires'
+    ', Profile),
     ('/genre-chooser', GenreChooser),
     ('/difficulty-chooser', DifficultyChooser),
     ('/game', GameHandler),
