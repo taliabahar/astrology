@@ -124,8 +124,8 @@ class UpdateScoreHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', LoginHandler),
-    ('/aires'
-    ', Profile),
+    ('/aires' AiresHandler),
+    ('/Profile', ProfileHandler),
     ('/genre-chooser', GenreChooser),
     ('/difficulty-chooser', DifficultyChooser),
     ('/game', GameHandler),
