@@ -2,7 +2,6 @@ function hover(element) {
   let sign = element.parentNode.id.toLowerCase();
   let goldStringSign = `../media/gold-png/${sign}-gold.png`;
   element.setAttribute('src', goldStringSign);
-  // console.log(element.previousElementSibling.style.textShadow = );
   element.previousElementSibling.style.textShadow = "#FFDD20 0px 0px 3px";
 }
 
