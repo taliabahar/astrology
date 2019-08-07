@@ -3,7 +3,7 @@ import jinja2
 # import json
 # import os
 # import time
-# from google.appengine.api import users
+from google.appengine.api import users
 # from google.appengine.ext import ndb
 # from musiq_models import User
 # from profile_methods import create_profile, ordered_highscores, logout_url, login_url
@@ -18,31 +18,32 @@ class HomePage(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("index.html")
         self.response.write(template.render());
-# class LoginHandler(webapp2.RequestHandler):
-#     def get(self):
-#         new_user_template = jinja_env.get_template("templates/new_user.html")
-#         google_login_template = jinja_env.get_template("templates/google_login.html")
-#         # get Google user
-#         user = users.get_current_user()
-#
-#         if user:
-#             # look for user in datastore
-#             existing_user = User.query().filter(User.email == user.email()).get()
-#             nickname = user.nickname()
-#             if not existing_user:
-#                 fields = {
-#                   "nickname": nickname,
-#                   "logout_url": logout_url,d
-#                 }
-#                 # prompt new users to sign up
-#                 self.response.write(new_user_template.render(fields))
-#             else:
-#                 # direct existing user to feed
-#                 self.redirect('/profile')
-#                 return
-#         else:
-#             # Ask user to sign in to Google
-#             self.response.write(google_login_template.render({ "login_url": login_url }))
+
+class LoginHandler(webapp2.RequestHandler):
+    def get(self):
+        new_user_template = jinja_env.get_template("templates/login.html")
+        google_login_template = jinja_env.get_template("templates/google_login.html")
+        # get Google user
+        user = users.get_current_user()
+
+        if user:
+            # look for user in datastore
+            existing_user = User.query().filter(User.email == user.email()).get()
+            nickname = user.nickname()
+            if not existing_user:
+                fields = {
+                  "nickname": nickname,
+                  "logout_url": logout_url,d
+                }
+                # prompt new users to sign up
+                self.response.write(new_user_template.render(fields))
+            else:
+                # direct existing user to feed
+                self.redirect('/profile')
+                return
+        else:
+            # Ask user to sign in to Google
+            self.response.write(google_login_template.render({ "login_url": login_url }))
 #
 #
 # class Profile(webapp2.RequestHandler):
