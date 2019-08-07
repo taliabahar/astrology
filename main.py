@@ -7,6 +7,7 @@ from astrology_models import *
 # import os
 # import time
 from google.appengine.api import users
+import requests
 # from google.appengine.ext import ndb
 # from musiq_models import User
 # from profile_methods import create_profile, ordered_highscores, logout_url, login_url
@@ -21,6 +22,17 @@ class HomePage(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("index.html")
         self.response.write(template.render());
+
+class HoroscopeHandler(webapp2.RequestHandler):
+    def post(self):
+        query = self.request.get('query')
+        base_url = "https://aztro.sameerkumar.website?"
+        # params = (
+        #     ('sign', 'aries'),
+        #     ('day', 'today'),
+        # )
+        # response =
+        # results =
 
 # class LoginHandler(webapp2.RequestHandler):
 #     def get(self):
@@ -154,4 +166,5 @@ app = webapp2.WSGIApplication([
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
     ('/picture/([^/]+)?', MediaHandler),
+    ('/horoscope', HoroscopeHandler),
 ], debug=True)
