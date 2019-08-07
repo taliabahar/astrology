@@ -7,4 +7,6 @@ class Photo(ndb.Model):
 class User(ndb.Model):
     name = ndb.StringProperty()
     email = ndb.StringProperty()
-    profilePicture = ndb.BlobKeyProperty()
+    sign = String.Property()
+    profilePicture = ndb.StructuredProperty(Photo,repeated=False)
+    friends = ndb.StructuredProperty(User,repeated=True)
