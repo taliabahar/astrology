@@ -9,4 +9,4 @@ class User(ndb.Model):
     email = ndb.StringProperty()
     sign = ndb.StringProperty()
     profilePicture = ndb.StructuredProperty(Photo,repeated=False)
-    friends = ndb.StructuredProperty(User,repeated=True)
+    #friends = ndb.StructuredProperty(User,repeated=True)
