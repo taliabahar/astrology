@@ -1,0 +1,21 @@
+body {
+  display: grid;
+  grid-template-columns: 11fr 4fr;
+  grid-template-rows: 2fr 8fr;
+  height: 100vh;
+}
+
+#welcome {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+}
+
+#links {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+#friends {
+  grid-row: 2;
+  grid-column: 2;
+}
