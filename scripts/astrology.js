@@ -14,6 +14,6 @@ function unhover(element) {
 
 $(document).ready(function() {
   $('img.thumbnail').click(function() {
-    window.location.href = this.alt + '.html';
+    window.location.href =  "sun_signs/" + this.alt + '.html';
   });
 });
