@@ -1,5 +1,8 @@
 import webapp2
 import jinja2
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
+from astrology_models import *
 # import json
 # import os
 # import time
@@ -122,15 +125,33 @@ class LoginHandler(webapp2.RequestHandler):
 #         if new_score > current_user.highscore:
 #             current_user.highscore = new_score
 #             current_user.put()
+class FormHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("photoForm.html")
+        var = {}
+        var['upload_url']= blobstore.create_upload_url('/upload_photo')
+        self.response.write(template.render(var))
+class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+        def post(self):
+            name = self.request.get('name')
+            upload = self.get_uploads()[0]
+            photo = Photo(
+                blob_key = upload.key(),
+                name = name,
+            )
+            photo.put()
+            self.redirect('/picture/{}'.format(upload.key()))
+
+class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self, photo_key):
+        if not blobstore.get(photo_key):
+            self.error(404)
+        else:
+            self.send_blob(photo_key)
 
 app = webapp2.WSGIApplication([
     ('/', HomePage),
-    # ('/profile', Profile),
-    # ('/genre-chooser', GenreChooser),
-    # ('/difficulty-chooser', DifficultyChooser),
-    # ('/game', GameHandler),
-    # ('/end-game', EndgameHandler),
-    # ('/seed', SeedHandler),
-    # ('/random-question', RandomQuestionHandler),
-    # ('/update-score', UpdateScoreHandler),
+    ('/upload_photo', PhotoUploadHandler),
+    ('/photoForm', FormHandler),
+    ('/picture/([^/]+)?', MediaHandler),
 ], debug=True)
