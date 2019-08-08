@@ -9,8 +9,9 @@ window.onload = function() {
     function meow(event) {
       meow_sound.play();
       getAdvice();
-      document.getElementById("text").innerHTML = "";
+      document.getElementById("text").innerHTML = txt;
       console.log(txt);
+      // animationEffect();
       // typeWriter();
     }
 
