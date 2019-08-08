@@ -8,10 +8,6 @@ from google.appengine.api import users
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
-class HomePage(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_env.get_template("index.html")
-        self.response.write(template.render());
 #authuser checks if user is in datastore and if the password matches that user's
 #should check for uniqueness of username & process password not as string
 def authUser(username, password):
@@ -30,11 +26,29 @@ def createUser(username,password,email):
         email = email
     )
     user.put()
+    
+class HomePage(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("index.html")
+        user = users.get_current_user()
+        if user:
+            nickname = user.nickname()
+            logout_url = users.create_logout_url('/')
+            greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
+                nickname, logout_url)
+            print(greeting)
+        else:
+            self.redirect('/login')
+        self.response.write(template.render());
+
 #incorporate google login_url to use google account
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("login.html")
-        self.response.write(template.render())
+        login_url = users.create_login_url('/')
+        self.response.write(template.render({
+            "login_url": login_url
+        }))
     def post(self):
         user = users.get_current_user()
         name = self.request.get('username')
@@ -43,14 +57,25 @@ class LoginHandler(webapp2.RequestHandler):
         new_password = self.request.get('password-new')
         email = self.request.get('email');
         if authUser(name,password):
-            self.redirect('/')
+            self.redirect('/profile')
         else:
             createUser(new_username,new_password,email)
-            self.redirect('/photoForm')
+            self.redirect('/profile')
 class CatHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
+
+class ProfileHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("profile.html")
+        user = users.get_current_user()
+        if user:
+            self.response.write(template.render({
+                "username": user.nickname()
+            }))
+        else:
+            self.redirect('/login')
 # class LoginHandler(webapp2.RequestHandler):
 #     def get(self):
 #         new_user_template = jinja_env.get_template("templates/login.html")
@@ -189,6 +214,7 @@ class CatHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', HomePage),
     ('/login', LoginHandler),
+    ('/profile', ProfileHandler),
     ('/cat', CatHandler),
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
