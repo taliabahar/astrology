@@ -10,7 +10,7 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
 #authuser checks if user is in datastore and if the password matches that user's
 #should check for uniqueness of username & process password not as string
-def authUser(username, password):
+def userExists(username, password):
     existing_users = User.query().filter(User.name == username).fetch()
     for person in existing_users:
         if person.password == password:
@@ -26,7 +26,7 @@ def createUser(username,password,email):
         email = email
     )
     user.put()
-    
+
 class HomePage(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("index.html")
@@ -37,17 +37,22 @@ class HomePage(webapp2.RequestHandler):
             greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
                 nickname, logout_url)
             print(greeting)
+            self.response.write(template.render({
+                'greeting':greeting
+            }));
         else:
             self.redirect('/login')
-        self.response.write(template.render());
+
 
 #incorporate google login_url to use google account
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("login.html")
         login_url = users.create_login_url('/')
+        greeting = '(<a href="{}">sign in</a>)'.format(
+            login_url)
         self.response.write(template.render({
-            "login_url": login_url
+            "greeting": greeting
         }))
     def post(self):
         user = users.get_current_user()
@@ -56,7 +61,7 @@ class LoginHandler(webapp2.RequestHandler):
         new_username = self.request.get('username-new')
         new_password = self.request.get('password-new')
         email = self.request.get('email');
-        if authUser(name,password):
+        if userExists(name,password):
             self.redirect('/profile')
         else:
             createUser(new_username,new_password,email)
