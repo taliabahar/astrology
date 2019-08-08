@@ -1,19 +1,10 @@
 import webapp2
 import jinja2
 from google.appengine.ext import blobstore
+from google.appengine.api import users
 from google.appengine.ext.webapp import blobstore_handlers
 from astrology_models import *
-# import json
-# import os
-# import time
 from google.appengine.api import users
-# from google.appengine.ext import ndb
-# from musiq_models import User
-# from profile_methods import create_profile, ordered_highscores, logout_url, login_url
-# from dbload import seed_data
-# from models import Song
-# from random import choice
-# from game_service import random_song
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
@@ -21,6 +12,43 @@ class HomePage(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("index.html")
         self.response.write(template.render());
+#authuser checks if user is in datastore and if the password matches that user's
+#should check for uniqueness of username & process password not as string
+def authUser(username, password):
+    existing_users = User.query().filter(User.name == username).fetch()
+    for person in existing_users:
+        if person.password == password:
+            return True
+        else:
+            return False
+#will create a user based on given parameters
+#should edit to take a user object containing every parameter
+def createUser(username,password,email):
+    user = User(
+        name = username,
+        password = password,
+        email = email
+    )
+    user.put()
+#incorporate google login_url to use google account
+class LoginHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("login.html")
+        self.response.write(template.render())
+    def post(self):
+        user = users.get_current_user()
+        name = self.request.get('username')
+        password = self.request.get('password')
+        new_username = self.request.get('username-new')
+        new_password = self.request.get('password-new')
+        email = self.request.get('email');
+        if authUser(name,password):
+            self.redirect('/')
+        else:
+            createUser(new_username,new_password,email)
+            self.redirect('/photoForm')
+
+
 
 # class LoginHandler(webapp2.RequestHandler):
 #     def get(self):
@@ -151,6 +179,7 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 app = webapp2.WSGIApplication([
     ('/', HomePage),
+    ('/login', LoginHandler),
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
     ('/picture/([^/]+)?', MediaHandler),
