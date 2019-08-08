@@ -47,9 +47,10 @@ class LoginHandler(webapp2.RequestHandler):
         else:
             createUser(new_username,new_password,email)
             self.redirect('/photoForm')
-
-
-
+class CatHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("cat.html")
+        self.response.write(template.render())
 # class LoginHandler(webapp2.RequestHandler):
 #     def get(self):
 #         new_user_template = jinja_env.get_template("templates/login.html")
@@ -180,6 +181,7 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
 app = webapp2.WSGIApplication([
     ('/', HomePage),
     ('/login', LoginHandler),
+    ('/cat', CatHandler),
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
     ('/picture/([^/]+)?', MediaHandler),
