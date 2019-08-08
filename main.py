@@ -149,6 +149,14 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(photo_key)
 
+class CatHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("photoForm.html")
+        var = {}
+        var['upload_url']= blobstore.create_upload_url('/upload_photo')
+        self.response.write(template.render(var))
+        
+
 app = webapp2.WSGIApplication([
     ('/', HomePage),
     ('/upload_photo', PhotoUploadHandler),
