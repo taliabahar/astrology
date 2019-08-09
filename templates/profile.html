@@ -4,13 +4,15 @@
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Cuprum|Rozha+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/profile.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../scripts/profile.js"></script>
     <title>Profile</title>
   </head>
   <body>
     <h1 id="Welcome">Welcome {{username}}!</h1>
     <section id="links">
-      <button href="horoscope.html">Look at your horoscope!<img class="icon" src="../media/profile-icons/tarot.png" alt="tarot cards icons"></button>
-      <button href="cat.html">Get advice from your cat!<img class="icon" src="../media/profile-icons/lightbulb.png" alt="lightbulb icons"></button>
+      <button id="horoscope">Look at your horoscope!<img class="icon" src="../media/profile-icons/tarot.png" alt="tarot cards icons"></button>
+      <button id="cat">Get advice from your cat!<img class="icon" src="../media/profile-icons/lightbulb.png" alt="lightbulb icons"></button>
     </section>
     <section class="friends">
       <p id="friends-title">YOUR FRIENDS <img class="icon" src="../media/profile-icons/friendship.png" alt="friends icons"> <p>
