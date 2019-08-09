@@ -21,6 +21,7 @@ body {
 }
 #profile-button:hover{
   border-color: rgba(255,255,255,1);
+}
 
 h1 {
   text-align: center;
@@ -44,5 +45,4 @@ h1 {
 
 #wrap {
   margin-top: 5%;
->>>>>>> 16d1fe4be28fb2682bc974b0bc76ed5ed31d0d2d
 }

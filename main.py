@@ -5,6 +5,14 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import blobstore_handlers
 from astrology_models import *
 from google.appengine.api import users
+import json
+import os
+from urllib import urlencode
+from google.appengine.api import urlfetch
+import urllib
+from pprint import pprint
+from pprint import pformat
+import logging
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
