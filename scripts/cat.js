@@ -21,7 +21,7 @@ window.onload = function() {
       .then((resp) => resp.json())
       .then(function(data) {
         let advice = data["slip"]["advice"];
-        txt = advice;
+        txt = "\"" + advice + "\"";
     });
   }
 
