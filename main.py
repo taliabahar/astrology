@@ -11,7 +11,7 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 #authuser checks if user is in datastore and if the password matches that user's
 #should check for uniqueness of username & process password not as string
 def userExists(email):
-    if User.query().filter(User.email == email).get():
+    if User.query().filter(User.email == str(email)).get():
         print(True)
         return True
     else:
@@ -46,7 +46,7 @@ class HomePage(webapp2.RequestHandler):
         if google_user:
             nickname = google_user.nickname()
             email = google_user.email()
-            createUser(nickname,email,"0")
+            createUser(nickname,"0",email)
             logout_url = users.create_logout_url('/')
             greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
                 nickname, logout_url)
@@ -81,7 +81,7 @@ class LoginHandler(webapp2.RequestHandler):
             logout_url = users.create_logout_url('/profile?email={}'.format(email))
             self.redirect(logout_url)
         else:
-            createUser(new_username,new_password,new_email)
+            createUser(new_username,new_password,str(new_email))
             logout_url = users.create_logout_url('/profile?email={}'.format(new_email))
             self.redirect(logout_url)
 class CatHandler(webapp2.RequestHandler):
@@ -89,76 +89,49 @@ class CatHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
 
-# class RecipeDisplayHandler(webapp2.RequestHandler):
-#     def post(self):
-#         query = self.request.get('query')
-#         base_url = 'http://www.recipepuppy.com/api/?'
-#         params = { 'q': query }
-#         response = urlfetch.fetch(base_url + urlencode(params)).content
-#         results = json.loads(response)
-#
-#         template = jinja_env.get_template('templates/recipe.html')
-#         self.response.write(template.render({
-#             'results': results
-#         }))
-
-class HoroscopeHandler(webapp2.RequestHandler):
-    def get(self):
-        # query = self.request.get('query')
-        base_url = 'https://aztro.sameerkumar.website/?'
-        params = {'sign' : 'leo', 'day' : 'today'} #need to set sign to users sign
-        #params = {'sign' : self.request.get('sign'), 'day' : 'today'}
-        payload = urllib.urlencode(params)
-        myurl = base_url + urlencode(params)
-        # logging.info("URL: " + myurl)
-        response = urlfetch.fetch(base_url + urlencode(params), method=urlfetch.POST, payload=payload).content
-        results = json.loads(response)
-        logging.info(pformat(results))
-
-        template = jinja_env.get_template('horoscope.html')
-        self.response.write(template.render({
-            'results': results
-        }))
-
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("profile.html")
         email = str(self.request.get('email'))
-        print(userExists(email))
         user = users.get_current_user()
         # print("EHEKHEHELHLIEUHB")
         # print(type(email))
-        print(User.query().filter(User.email == email).get())
+        # print(User.query().filter(User.email == email).get())
         if userExists(email) :
             self.response.write(template.render({
-                "username": User.query().filter(User.email == email).get().name
+                "username": User.query().filter(User.email == email).get().name,
+                "upload_url": blobstore.create_upload_url('/pic'),
             }))
         elif user:
             createUser(
                 user.nickname(),
+                "0",
                 user.email(),
-                "0"
             )
+            #print(User.query().filter(User.email == user.email()).get().profilePicture)
+            image = User.query().filter(User.email == user.email()).get().profilePicture
+            # print(userExists(email))
             self.response.write(template.render({
-                "username": users.get_current_user().nickname()
+                "username": users.get_current_user().nickname(),
+                "upload_url": blobstore.create_upload_url('/pic'),
+                "image": image
             }))
         else:
             self.redirect('/login')
-class ProfilePicHandler(webapp2.RequestHandler):
+class ProfilePicHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
-        email = self.request.get('email')
         google_user = users.get_current_user();
         upload = self.get_uploads()[0]
         photo = Photo(
             blob_key = upload.key(),
         )
         photo.put()
-        if google_user:
-            stored_user = User.query().filter(User.email == google_user.email()).get()
-            store_user.profilePicture = photo;
-        self.redirect('/picture/{}'.format(upload.key()))
-
-
+        print("[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]")
+        print(User.query().filter(User.email==google_user.email()))
+        stored_user = User.query().filter(User.email == google_user.email()).get()
+        stored_user.profilePicture = photo.blob_key;
+        stored_user.put()
+        self.redirect('/profile')
 
 class FormHandler(webapp2.RequestHandler):
     def get(self):
@@ -166,7 +139,6 @@ class FormHandler(webapp2.RequestHandler):
         var = {}
         var['upload_url']= blobstore.create_upload_url('/upload_photo')
         self.response.write(template.render(var))
-
 class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         def post(self):
             name = self.request.get('name')
@@ -192,13 +164,14 @@ class CatHandler(webapp2.RequestHandler):
         var['upload_url']= blobstore.create_upload_url('/upload_photo')
         self.response.write(template.render(var))
 
+
 app = webapp2.WSGIApplication([
     ('/', HomePage),
     ('/login', LoginHandler),
     ('/profile', ProfileHandler),
     ('/cat', CatHandler),
+    ('/pic', ProfilePicHandler),
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
     ('/picture/([^/]+)?', MediaHandler),
-    ('/horoscope', HoroscopeHandler),
 ], debug=True)

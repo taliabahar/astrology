@@ -8,6 +8,7 @@
   </head>
   <body>
     <h1 id="Welcome">Welcome {{username}}!</h1>
+    <img width="400px"src="/picture/{{image}}">
     <section id="links">
       <button>Look at your horoscope!<img class="icon" src="../media/profile-icons/tarot.png" alt="tarot cards icons"></button>
       <button>Get your sign anime!<img class="icon" src="../media/profile-icons/computer.png" alt="tv icons"></button>
@@ -17,7 +18,7 @@
       <p id="friends-title">YOUR FRIENDS <img class="icon" src="../media/profile-icons/friendship.png" alt="friends icons"> <p>
     </section>
     <h3> Add a profile Picture </h3>
-    <form method="POST" action= "" enctype="multipart/form-data">
+    <form method="POST" action={{upload_url}} enctype="multipart/form-data">
       <input type="file" name="file">
       <input type="submit" name="submit" value="Submit">
     </form>
