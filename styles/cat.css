@@ -1,4 +1,5 @@
 body{
+  margin: 0;
   background-color: rgb( 202, 186, 253);
   height: 100vh;
   width: 100vw;
@@ -10,37 +11,41 @@ body{
 h1{
   text-align: center;
   font-family: 'Rozha One', serif;
+  text-shadow: #FFDD20 1px 1px 2px;
   color: white;
 }
 
-/* p {
-  text-align: center;
-} */
-
 #cat_img{
   padding-left: 45px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#text p {
+#text{
   font-family: 'Cuprum', sans-serif;
-  overflow: hidden;
+  text-align: center;
+  margin: auto;
+  font-size: 30px;
+  /* overflow: hidden;
   border-right: .15em solid blue;
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: .15em;
   animation:
     typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite;
+    blink-caret .5s step-end infinite; */
 }
 
 /* The typing effect */
-@keyframes typing {
+/* @keyframes typing {
   from { width: 0 }
   to { width: 100% }
-}
+} */
 
 /* The typewriter cursor effect */
-@keyframes blink-caret {
+/* @keyframes blink-caret {
   from, to { border-color: transparent }
   50% { border-color: blue }
-}
+} */
