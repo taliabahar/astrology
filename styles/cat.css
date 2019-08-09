@@ -1,5 +1,10 @@
 body{
   background-color: rgb( 202, 186, 253);
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("../media/catBackground.jpg");
 }
 
 h1{
@@ -12,3 +17,11 @@ p {
   font-family: 'Cuprum', sans-serif;
   text-align: center;
 }
+
+/* #text {
+  width: 0px;
+  height: 2em;
+  white-space:
+  nowrap;
+  overflow: hidden;
+} */

@@ -10,8 +10,14 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
 #authuser checks if user is in datastore and if the password matches that user's
 #should check for uniqueness of username & process password not as string
-def userExists(username, password):
-    existing_users = User.query().filter(User.name == username).fetch()
+def userExists(email):
+    if User.query().filter(User.email == email).get():
+        return True
+    else:
+        return False
+
+def userInStore(email, password):
+    existing_users = User.query().filter(User.email == email).fetch()
     for person in existing_users:
         if person.password == password:
             return True
@@ -20,28 +26,36 @@ def userExists(username, password):
 #will create a user based on given parameters
 #should edit to take a user object containing every parameter
 def createUser(username,password,email):
-    user = User(
-        name = username,
-        password = password,
-        email = email
-    )
-    user.put()
+    if userInStore(email,password):
+        return False
+    else:
+        user = User(
+            name = username,
+            password = password,
+            email = email
+        )
+        user.put()
+        return True
 
 class HomePage(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("index.html")
-        user = users.get_current_user()
-        if user:
-            nickname = user.nickname()
+        google_user = users.get_current_user()
+        if google_user:
+            nickname = google_user.nickname()
+            email = google_user.email()
+            createUser(nickname,email,"0")
             logout_url = users.create_logout_url('/')
             greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
                 nickname, logout_url)
-            print(greeting)
             self.response.write(template.render({
                 'greeting':greeting
             }));
         else:
-            self.redirect('/login')
+            greeting = 'Welcome User!'
+            self.response.write(template.render({
+                'greeting':greeting
+            }));
 
 
 #incorporate google login_url to use google account
@@ -49,23 +63,24 @@ class LoginHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("login.html")
         login_url = users.create_login_url('/')
-        greeting = '(<a href="{}">sign in</a>)'.format(
+        greeting = '<a href="{}">google sign in</a>'.format(
             login_url)
         self.response.write(template.render({
             "greeting": greeting
         }))
     def post(self):
-        user = users.get_current_user()
         name = self.request.get('username')
         password = self.request.get('password')
+        email = self.request.get('email')
         new_username = self.request.get('username-new')
         new_password = self.request.get('password-new')
-        email = self.request.get('email');
-        if userExists(name,password):
-            self.redirect('/profile')
+        new_email = self.request.get('email-new');
+        if userInStore(email,password):
+            
+            self.redirect('/profile?email={}'.format(email))
         else:
-            createUser(new_username,new_password,email)
-            self.redirect('/profile')
+            createUser(new_username,new_password,new_email)
+            self.redirect('/profile?email={}'.format(new_email))
 class CatHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("cat.html")
@@ -74,10 +89,15 @@ class CatHandler(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("profile.html")
+        email = self.request.get('email')
         user = users.get_current_user()
-        if user:
+        if userExists(email):
             self.response.write(template.render({
-                "username": user.nickname()
+                "username": User.query().filter(User.email == email).get().name
+            }))
+        elif user:
+            self.response.write(template.render({
+                "username": users.get_current_user().nickname()
             }))
         else:
             self.redirect('/login')
@@ -207,6 +227,14 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
             self.error(404)
         else:
             self.send_blob(photo_key)
+
+class CatHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("photoForm.html")
+        var = {}
+        var['upload_url']= blobstore.create_upload_url('/upload_photo')
+        self.response.write(template.render(var))
+
 
 app = webapp2.WSGIApplication([
     ('/', HomePage),

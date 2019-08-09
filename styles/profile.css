@@ -38,6 +38,9 @@ button{
  font-family: 'Cuprum', sans-serif;
  font-size: 22px;
  border-radius: 5px;
+ /* display: flex;
+ justify-content: center;
+ align-items: center; */
 }
 
 #friends-title{
