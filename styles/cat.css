@@ -13,6 +13,7 @@ h1{
   font-family: 'Rozha One', serif;
   text-shadow: #FFDD20 1px 1px 2px;
   color: white;
+  font-size: 40px;
 }
 
 #cat_img{
@@ -27,19 +28,10 @@ h1{
   font-family: 'Cuprum', sans-serif;
   text-align: center;
   margin: auto;
-  font-size: 30px;
-  /* overflow: hidden;
-  border-right: .15em solid blue;
-  white-space: nowrap;
-  margin: 0 auto;
-  letter-spacing: .15em;
-  animation:
-    typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite; */
+  font-size: 34px;
 }
 
 #profile-button{
-  display:inline-block;
   padding:0.3em 1.2em;
   margin:0 0.1em 0.1em 0;
   border:0.16em solid black;
@@ -52,20 +44,11 @@ h1{
   text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
   text-align:center;
   transition: all 0.2s;
-  margin-left: 46%;
+
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 #profile-button:hover{
   border-color: rgba(255,255,255,1);
 }
-
-/* The typing effect */
-/* @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-} */
-
-/* The typewriter cursor effect */
-/* @keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: blue }
-} */

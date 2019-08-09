@@ -5,6 +5,14 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import blobstore_handlers
 from astrology_models import *
 from google.appengine.api import users
+import json
+import os
+from urllib import urlencode
+from google.appengine.api import urlfetch
+import urllib
+from pprint import pprint
+from pprint import pformat
+import logging
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
@@ -84,23 +92,11 @@ class LoginHandler(webapp2.RequestHandler):
             createUser(new_username,new_password,new_email)
             logout_url = users.create_logout_url('/profile?email={}'.format(new_email))
             self.redirect(logout_url)
+            
 class CatHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
-
-# class RecipeDisplayHandler(webapp2.RequestHandler):
-#     def post(self):
-#         query = self.request.get('query')
-#         base_url = 'http://www.recipepuppy.com/api/?'
-#         params = { 'q': query }
-#         response = urlfetch.fetch(base_url + urlencode(params)).content
-#         results = json.loads(response)
-#
-#         template = jinja_env.get_template('templates/recipe.html')
-#         self.response.write(template.render({
-#             'results': results
-#         }))
 
 class HoroscopeHandler(webapp2.RequestHandler):
     def get(self):
@@ -170,12 +166,6 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(photo_key)
 
-class CatHandler(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_env.get_template("photoForm.html")
-        var = {}
-        var['upload_url']= blobstore.create_upload_url('/upload_photo')
-        self.response.write(template.render(var))
 
 app = webapp2.WSGIApplication([
     ('/', HomePage),
