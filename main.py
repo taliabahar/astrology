@@ -95,8 +95,8 @@ class ProfileHandler(webapp2.RequestHandler):
         email = str(self.request.get('email'))
         print(userExists(email))
         user = users.get_current_user()
-        print("EHEKHEHELHLIEUHB")
-        print(type(email))
+        # print("EHEKHEHELHLIEUHB")
+        # print(type(email))
         print(User.query().filter(User.email == email).get())
         if userExists(email) :
             self.response.write(template.render({
@@ -113,6 +113,21 @@ class ProfileHandler(webapp2.RequestHandler):
             }))
         else:
             self.redirect('/login')
+class ProfilePicHandler(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        google_user = users.get_current_user();
+        upload = self.get_uploads()[0]
+        photo = Photo(
+            blob_key = upload.key(),
+        )
+        photo.put()
+        if google_user:
+            stored_user = User.query().filter(User.email == google_user.email()).get()
+            store_user.profilePicture = photo;
+        self.redirect('/picture/{}'.format(upload.key()))
+
+
 
 class FormHandler(webapp2.RequestHandler):
     def get(self):
