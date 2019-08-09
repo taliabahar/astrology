@@ -2,9 +2,9 @@ body{
   background-color: rgb( 202, 186, 253);
   height: 100vh;
   width: 100vw;
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat;
   background-size: cover;
-  background-image: url("../media/catBackground.jpg");
+  background-image: url("../media/catBackground.jpg"); */
 }
 
 h1{
@@ -13,15 +13,34 @@ h1{
   color: white;
 }
 
-p {
-  font-family: 'Cuprum', sans-serif;
+/* p {
   text-align: center;
+} */
+
+#cat_img{
+  padding-left: 45px;
 }
 
-/* #text {
-  width: 0px;
-  height: 2em;
-  white-space:
-  nowrap;
+#text p {
+  font-family: 'Cuprum', sans-serif;
   overflow: hidden;
-} */
+  border-right: .15em solid blue;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: .15em;
+  animation:
+    typing 3.5s steps(30, end),
+    blink-caret .5s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: blue }
+}
