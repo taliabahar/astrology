@@ -1,10 +1,10 @@
 window.onload = function() {
-    let speed = 150;
-    let i = 0;
+    // let speed = 150;
+    // let i = 0;
     let cat = document.getElementById("cat_img");
     cat.addEventListener('click', meow);
     meow_sound = document.getElementById("meow_sound");
-    txt = "Hi! I'm Phillipe the good advice cat!"
+    txt = "Hi, I'm Phillipe! Click me for good advice!";
 
     function meow(event) {
       meow_sound.play();
@@ -37,9 +37,9 @@ window.onload = function() {
   //   }
   // }
 
-  function animationEffect() {
-    let spanWidth = $('#text').width();
-    $('#text').animate( { width: spanWidth }, 3000 );
-  }
+  // function animationEffect() {
+  //   let spanWidth = $('#text').width();
+  //   $('#text').animate( { width: spanWidth }, 3000 );
+  // }
 
 }
