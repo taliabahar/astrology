@@ -185,4 +185,5 @@ app = webapp2.WSGIApplication([
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
     ('/picture/([^/]+)?', MediaHandler),
+    ('/horoscope', HoroscopeHandler),
 ], debug=True)
