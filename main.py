@@ -5,6 +5,14 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import blobstore_handlers
 from astrology_models import *
 from google.appengine.api import users
+import json
+import os
+from urllib import urlencode
+from google.appengine.api import urlfetch
+import urllib
+from pprint import pprint
+from pprint import pformat
+import logging
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader("templates"))
 
@@ -84,11 +92,33 @@ class LoginHandler(webapp2.RequestHandler):
             createUser(new_username,new_password,str(new_email))
             logout_url = users.create_logout_url('/profile?email={}'.format(new_email))
             self.redirect(logout_url)
+            
 class CatHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
 
+<<<<<<< HEAD
+=======
+class HoroscopeHandler(webapp2.RequestHandler):
+    def get(self):
+        # query = self.request.get('query')
+        base_url = 'https://aztro.sameerkumar.website/?'
+        params = {'sign' : 'leo', 'day' : 'today'} #need to set sign to users sign
+        #params = {'sign' : self.request.get('sign'), 'day' : 'today'}
+        payload = urllib.urlencode(params)
+        myurl = base_url + urlencode(params)
+        # logging.info("URL: " + myurl)
+        response = urlfetch.fetch(base_url + urlencode(params), method=urlfetch.POST, payload=payload).content
+        results = json.loads(response)
+        logging.info(pformat(results))
+
+        template = jinja_env.get_template('horoscope.html')
+        self.response.write(template.render({
+            'results': results
+        }))
+
+>>>>>>> 4c367fa41fab387cce0940ed69d406c64eade3de
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("profile.html")
@@ -157,12 +187,6 @@ class MediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(photo_key)
 
-class CatHandler(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_env.get_template("photoForm.html")
-        var = {}
-        var['upload_url']= blobstore.create_upload_url('/upload_photo')
-        self.response.write(template.render(var))
 
 
 app = webapp2.WSGIApplication([

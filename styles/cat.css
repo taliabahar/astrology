@@ -1,4 +1,5 @@
 body{
+  margin: 0;
   background-color: rgb( 202, 186, 253);
   height: 100vh;
   width: 100vw;
@@ -10,37 +11,44 @@ body{
 h1{
   text-align: center;
   font-family: 'Rozha One', serif;
+  text-shadow: #FFDD20 1px 1px 2px;
   color: white;
+  font-size: 40px;
 }
-
-/* p {
-  text-align: center;
-} */
 
 #cat_img{
   padding-left: 45px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#text p {
+#text{
   font-family: 'Cuprum', sans-serif;
-  overflow: hidden;
-  border-right: .15em solid blue;
-  white-space: nowrap;
-  margin: 0 auto;
-  letter-spacing: .15em;
-  animation:
-    typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite;
+  text-align: center;
+  margin: auto;
+  font-size: 34px;
 }
 
-/* The typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
+#profile-button{
+  padding:0.3em 1.2em;
+  margin:0 0.1em 0.1em 0;
+  border:0.16em solid black;
+  border-radius:2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:300;
+  color: black;
+  text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+  text-align:center;
+  transition: all 0.2s;
 
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: blue }
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+#profile-button:hover{
+  border-color: rgba(255,255,255,1);
 }

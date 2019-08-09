@@ -2,8 +2,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Gaegu|Cuprum|Rozha+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/horoscope.css">
+    <script src="../scripts/horoscope.js"></script>
     <title>Horoscope</title>
   </head>
   <body>
@@ -11,9 +13,10 @@
     <section>
       <section class="result">
         <div id="wrap">
-          <div id="circle" class="title">{{ results.description }}</div>
+          <div class="title">{{ results.description }}</div>
         </div>
-      </section>
+      <button id="profile-button">← Back to Profile</button>
+    </section>
   </section>
   </body>
 </html>
