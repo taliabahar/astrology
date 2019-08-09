@@ -1,0 +1,19 @@
+body {
+  background-color: rgb( 202, 186, 253);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+h1{
+  text-align: center;
+  color: white;
+  font-family: 'Rozha One', serif;
+  text-shadow: #FFDD20 0px 0px 2px;
+  font-size: 45px;
+}
+
+input[type=submit] {
+  margin-top: 20px;
+}
