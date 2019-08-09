@@ -55,8 +55,8 @@ class HomePage(webapp2.RequestHandler):
             nickname = google_user.nickname()
             email = google_user.email()
             createUser(nickname,"0",email)
-            logout_url = users.create_logout_url('/')
-            greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
+            logout_url = users.create_logout_url('/login')
+            greeting = 'Welcome, {}! <a href="{}">sign out</a>'.format(
                 nickname, logout_url)
             self.response.write(template.render({
                 'greeting':greeting
@@ -92,33 +92,48 @@ class LoginHandler(webapp2.RequestHandler):
             createUser(new_username,new_password,str(new_email))
             logout_url = users.create_logout_url('/profile?email={}'.format(new_email))
             self.redirect(logout_url)
-            
+
 class CatHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
 
-<<<<<<< HEAD
-=======
+class SignHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_env.get_template("pickSign.html")
+        self.response.write(template.render())
+    def post(self):
+        sign = self.request.get("signs")
+        user = users.get_current_user()
+        if user:
+            user_model=User.query().filter(User.email == user.email()).get()
+            user_model.sign = sign
+            user_model.put()
+        self.redirect('/profile')
+
 class HoroscopeHandler(webapp2.RequestHandler):
     def get(self):
         # query = self.request.get('query')
-        base_url = 'https://aztro.sameerkumar.website/?'
-        params = {'sign' : 'leo', 'day' : 'today'} #need to set sign to users sign
-        #params = {'sign' : self.request.get('sign'), 'day' : 'today'}
-        payload = urllib.urlencode(params)
-        myurl = base_url + urlencode(params)
-        # logging.info("URL: " + myurl)
-        response = urlfetch.fetch(base_url + urlencode(params), method=urlfetch.POST, payload=payload).content
-        results = json.loads(response)
-        logging.info(pformat(results))
+        user = users.get_current_user()
+        if user:
+            sign=User.query().filter(User.email == user.email()).get().sign
 
-        template = jinja_env.get_template('horoscope.html')
-        self.response.write(template.render({
-            'results': results
-        }))
+            base_url = 'https://aztro.sameerkumar.website/?'
+            params = {'sign' : sign, 'day' : 'today'} #need to set sign to users sign
+            #params = {'sign' : self.request.get('sign'), 'day' : 'today'}
+            payload = urllib.urlencode(params)
+            myurl = base_url + urlencode(params)
+            # logging.info("URL: " + myurl)
+            response = urlfetch.fetch(base_url + urlencode(params), method=urlfetch.POST, payload=payload).content
+            results = json.loads(response)
+            logging.info(pformat(results))
 
->>>>>>> 4c367fa41fab387cce0940ed69d406c64eade3de
+            template = jinja_env.get_template('horoscope.html')
+            self.response.write(template.render({
+                'results': results
+            }))
+        else:
+            self.redirect('/login')
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("profile.html")
@@ -138,13 +153,18 @@ class ProfileHandler(webapp2.RequestHandler):
                 "0",
                 user.email(),
             )
+            object = User.query().filter(User.email == user.email()).get()
+            image = object.profilePicture
+            sign = object.sign
             #print(User.query().filter(User.email == user.email()).get().profilePicture)
-            image = User.query().filter(User.email == user.email()).get().profilePicture
+            # image = User.query().filter(User.email == user.email()).get().profilePicture
             # print(userExists(email))
+
             self.response.write(template.render({
                 "username": users.get_current_user().nickname(),
                 "upload_url": blobstore.create_upload_url('/pic'),
-                "image": image
+                "image": image,
+                "sign": sign
             }))
         else:
             self.redirect('/login')
@@ -194,6 +214,8 @@ app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/profile', ProfileHandler),
     ('/cat', CatHandler),
+    ('/sign', SignHandler),
+    ('/horoscope', HoroscopeHandler),
     ('/pic', ProfilePicHandler),
     ('/upload_photo', PhotoUploadHandler),
     ('/photoForm', FormHandler),
