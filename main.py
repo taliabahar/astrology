@@ -89,6 +89,37 @@ class CatHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("cat.html")
         self.response.write(template.render())
 
+# class RecipeDisplayHandler(webapp2.RequestHandler):
+#     def post(self):
+#         query = self.request.get('query')
+#         base_url = 'http://www.recipepuppy.com/api/?'
+#         params = { 'q': query }
+#         response = urlfetch.fetch(base_url + urlencode(params)).content
+#         results = json.loads(response)
+#
+#         template = jinja_env.get_template('templates/recipe.html')
+#         self.response.write(template.render({
+#             'results': results
+#         }))
+
+class HoroscopeHandler(webapp2.RequestHandler):
+    def get(self):
+        # query = self.request.get('query')
+        base_url = 'https://aztro.sameerkumar.website/?'
+        params = {'sign' : 'leo', 'day' : 'today'} #need to set sign to users sign
+        #params = {'sign' : self.request.get('sign'), 'day' : 'today'}
+        payload = urllib.urlencode(params)
+        myurl = base_url + urlencode(params)
+        # logging.info("URL: " + myurl)
+        response = urlfetch.fetch(base_url + urlencode(params), method=urlfetch.POST, payload=payload).content
+        results = json.loads(response)
+        logging.info(pformat(results))
+
+        template = jinja_env.get_template('horoscope.html')
+        self.response.write(template.render({
+            'results': results
+        }))
+
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_env.get_template("profile.html")
@@ -120,6 +151,7 @@ class FormHandler(webapp2.RequestHandler):
         var = {}
         var['upload_url']= blobstore.create_upload_url('/upload_photo')
         self.response.write(template.render(var))
+
 class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         def post(self):
             name = self.request.get('name')
@@ -144,7 +176,6 @@ class CatHandler(webapp2.RequestHandler):
         var = {}
         var['upload_url']= blobstore.create_upload_url('/upload_photo')
         self.response.write(template.render(var))
-
 
 app = webapp2.WSGIApplication([
     ('/', HomePage),
